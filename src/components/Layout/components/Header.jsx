@@ -11,6 +11,7 @@ import Typography from "@material-ui/core/Typography";
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
   appBar: {
+    background: `linear-gradient(left,#2bc1f6,#138ee9)`,
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
@@ -55,7 +56,7 @@ const Header = ({handleDrawerOpen, open}) => {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Mini variant drawer
+            ON BOARDING
           </Typography>
         </Toolbar>
       </AppBar>

@@ -2,6 +2,7 @@ import React from "react";
 
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
+import Breadcrumb from "./components/Breadcrumb"
 
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -48,6 +49,7 @@ export default function Layout({children}) {
       />
       <main className={classes.content}>
         <div className={classes.toolbar} />
+        <Breadcrumb />
         {children}
       </main>
     </div>

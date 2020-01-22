@@ -1,15 +1,22 @@
 import React from "react";
 import { Router } from "react-router-dom";
 import { createBrowserHistory } from "history";
+import { MuiThemeProvider } from "@material-ui/core/styles";
 
-import Routes from './Routes';
+import AuthState from "./context/auth/AuthState";
+import Routes from "./Routes";
+import theme from "./theme/theme";
 
 const browserHistory = createBrowserHistory();
 function App() {
   return (
-    <Router history={browserHistory}>
-      <Routes />
-    </Router>
+    <MuiThemeProvider theme={theme}>
+      <AuthState>
+        <Router history={browserHistory}>
+          <Routes />
+        </Router>
+      </AuthState>
+    </MuiThemeProvider>
   );
 }
 

@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import clsx from "clsx";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
+
+import AuthContext from "../../../context/auth/authContext";
 
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -12,21 +14,42 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
 import HomeIcon from "@material-ui/icons/Home";
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
 
 const drawerWidth = 240;
 const useStyles = makeStyles(theme => ({
+  listItemIcon: {
+    marginRight: 0
+  },
+  listItemText: {
+    fontWeight: 500,
+    color: theme.palette.text.secondary
+  },
+  listItem: {
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: "rgb(43, 193, 246, .1)",
+      borderLeft: `4px solid #2bc1f6`,
+      borderRadius: "4px",
+      "& $listItemIcon": {
+        color: "#138ee9",
+        marginLeft: "-4px"
+      }
+    },
+    "& + &": {
+      marginTop: theme.spacing(1)
+    }
+  },
   activeListItem: {
-    borderLeft: `4px solid ${theme.palette.primary.main}`,
+    borderLeft: `4px solid #2bc1f6`,
     borderRadius: "4px",
-    backgroundColor: theme.palette.primary.light,
+    backgroundColor: "rgb(43, 193, 246, .1)",
     "& $listItemText": {
       color: theme.palette.text.primary
     },
     "& $listItemIcon": {
-      color: theme.palette.primary.main,
+      color: "#138ee9",
       marginLeft: "-4px"
     }
   },
@@ -64,6 +87,7 @@ const useStyles = makeStyles(theme => ({
 const Sidebar = ({ open, handleDrawerClose }) => {
   const classes = useStyles();
   const theme = useTheme();
+  const authContext = useContext(AuthContext);
   return (
     <Drawer
       variant="permanent"
@@ -90,38 +114,39 @@ const Sidebar = ({ open, handleDrawerClose }) => {
       <Divider />
       <List>
         <ListItem
-          key={"login"}
-          activeClassName={classes.activeListItem}
+          key={"home"}
+          className={classes.listItem}
           component={NavLink}
-          exact to="/home"
+          activeClassName={classes.activeListItem}
+          exact
+          to="/home"
         >
-          <ListItemIcon>
+          <ListItemIcon className={classes.listItemIcon}>
             <HomeIcon />
           </ListItemIcon>
-          <ListItemText primary={"Home"} />
-        </ListItem>
-        <ListItem
-          key={"login"}
-          activeClassName={classes.activeListItem}
-          component={NavLink}
-          to="/login"
-        >
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText primary={"Login"} />
+          <ListItemText
+            classes={{ primary: classes.listItemText }}
+            primary={"Home"}
+          />
         </ListItem>
       </List>
       <Divider />
       <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>
-              {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-            </ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
+        <ListItem
+          key={"logout"}
+          className={classes.listItem}
+          onClick={() => authContext.logout()}
+          component={Link}
+          to="/login"
+        >
+          <ListItemIcon className={classes.listItemIcon}>
+            <PowerSettingsNewIcon />
+          </ListItemIcon>
+          <ListItemText
+            classes={{ primary: classes.listItemText }}
+            primary={"Logout"}
+          />
+        </ListItem>
       </List>
     </Drawer>
   );
