@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import FormOnBoarding from "./components/FormOnBoarding"
 import TableOnBoarding from "./components/TableOnBoarding"
 import DialogAction from "./components/DialogAction";
 
@@ -16,27 +17,42 @@ const Home = () => {
   const classes = useStyles();
   const [state, setState] = useState({
     rows: [],
-    openDialog: false
+    openAction: false,
+    openForm: false
   });
-  const { openDialog, rows } = state;
+  const { openAction, openForm, rows } = state;
 
-  const handleOpenDialog = rows => {
+  const handleOpenAction = rows => {
     setState({
       ...state,
       rows,
-      openDialog: true
+      openAction: true
     });
   };
 
   const handleCloseDialog = () => {
     setState({
       ...state,
-      openDialog: false
+      openAction: false
     });
   };
 
   const handleGetData = (data) => {
     setState({ ...state, data });
+  }
+
+  const handleOpenForm = () => {
+    setState({
+      ...state,
+      openForm: true
+    });
+  }
+
+  const handleCloseForm = () => {
+    setState({
+      ...state,
+      openForm: false
+    });
   }
 
   return (
@@ -47,12 +63,17 @@ const Home = () => {
         }}
         keepMounted
         rows={rows}
-        open={openDialog}
+        open={openAction}
         onClose={handleCloseDialog}
       />
       <TableOnBoarding
-        handleOpenDialog={handleOpenDialog}
+        handleOpenForm={handleOpenForm}
+        handleOpenAction={handleOpenAction}
         handleGetData={handleGetData}
+      />
+      <FormOnBoarding
+        open={openForm}
+        handleClose={handleCloseForm}
       />
     </div>
   );

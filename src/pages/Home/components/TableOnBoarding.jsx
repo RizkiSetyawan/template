@@ -2,7 +2,7 @@ import React, { createRef } from "react";
 import MaterialTable from "material-table";
 import Chip from "@material-ui/core/Chip";
 
-const TableOnBoarding = ({ handleOpenDialog, handleGetData }) => {
+const TableOnBoarding = ({ handleOpenAction, handleOpenForm, handleGetData }) => {
   const tableRef = createRef();
 
   const refreshData = () => {
@@ -92,12 +92,12 @@ const TableOnBoarding = ({ handleOpenDialog, handleGetData }) => {
           icon: "add",
           tooltip: "Add",
           isFreeAction: true,
-          onClick: () => alert('saya tamvan')
+          onClick: () => handleOpenForm()
         },
         {
           tooltip: "Actions",
           icon: "edit",
-          onClick: (evt, data) => handleOpenDialog(data)
+          onClick: (evt, data) => handleOpenAction(data)
         }
       ]}
     />
