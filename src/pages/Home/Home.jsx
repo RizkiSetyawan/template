@@ -1,42 +1,62 @@
-import React from "react";
-import MaterialTable from 'material-table'
+import React, { useState } from "react";
+
+import { makeStyles } from "@material-ui/core/styles";
+
+import TableOnBoarding from "./components/TableOnBoarding"
+import DialogAction from "./components/DialogAction";
+
+const useStyles = makeStyles(theme => ({
+  paper: {
+    width: "80%",
+    maxHeight: 435
+  }
+}));
 
 const Home = () => {
+  const classes = useStyles();
+  const [state, setState] = useState({
+    rows: [],
+    openDialog: false
+  });
+  const { openDialog, rows } = state;
+
+  const handleOpenDialog = rows => {
+    setState({
+      ...state,
+      rows,
+      openDialog: true
+    });
+  };
+
+  const handleCloseDialog = () => {
+    setState({
+      ...state,
+      openDialog: false
+    });
+  };
+
+  const handleGetData = (data) => {
+    setState({ ...state, data });
+  }
+
   return (
-      <MaterialTable
-        title="Actions On Selected Rows Preview"
-        columns={[
-          { title: "Name", field: "name" },
-          { title: "Surname", field: "surname" },
-          { title: "Birth Year", field: "birthYear", type: "numeric" },
-          {
-            title: "Birth Place",
-            field: "birthCity",
-            lookup: { 34: "İstanbul", 63: "Şanlıurfa" }
-          }
-        ]}
-        data={[
-          { name: "Mehmet", surname: "Baran", birthYear: 1987, birthCity: 63 },
-          {
-            name: "Zerya Betül",
-            surname: "Baran",
-            birthYear: 2017,
-            birthCity: 34
-          }
-        ]}
-        options={{
-          selection: true
+    <div>
+      <DialogAction
+        classes={{
+          paper: classes.paper
         }}
-        actions={[
-          {
-            tooltip: "Remove All Selected Users",
-            icon: "delete",
-            onClick: (evt, data) =>
-              console.log(data)
-          }
-        ]}
+        keepMounted
+        rows={rows}
+        open={openDialog}
+        onClose={handleCloseDialog}
       />
+      <TableOnBoarding
+        handleOpenDialog={handleOpenDialog}
+        handleGetData={handleGetData}
+      />
+    </div>
   );
 };
 
 export default Home;
+
