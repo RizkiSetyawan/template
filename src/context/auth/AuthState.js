@@ -13,7 +13,6 @@ const AuthState = props => {
   };
 
   const [state, dispatch] = useReducer(authReducer, initialState);
-  const URL = "http://localhost:8001";
 
   // LOAD USER
   const loadUser = async () => {
@@ -23,7 +22,7 @@ const AuthState = props => {
     }
 
     try {
-      const res = await axios.get(`${URL}/api/user/auth`);
+      const res = await axios.get(`${process.env.REACT_APP_SERVER_AUTH}`);
       dispatch({
         type: USER_LOADED,
         payload: res.data
@@ -41,7 +40,7 @@ const AuthState = props => {
       }
     };
     try {
-      const res = await axios.post(`${URL}/api/user/auth`, formData, config);
+      const res = await axios.post(`${process.env.REACT_APP_SERVER_AUTH}`, formData, config);
       if (res.data.status === "error") {
         return dispatch({
           type: LOGIN_FAIL,
