@@ -29,7 +29,7 @@ const AlertState = props => {
     ) {
       return "No Kendaraan sudah digunakan";
     } else {
-      return "Data Berhasil di Binding";
+      return message;
     }
   };
 

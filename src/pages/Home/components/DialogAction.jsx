@@ -11,7 +11,7 @@ import Chip from "@material-ui/core/Chip";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 function ConfirmationDialogRaw(props) {
-  const { onClose, open, rows, ...other } = props;
+  const { token, onClose, open, rows, refreshData, handleOpenAlert, ...other } = props;
   const radioGroupRef = React.useRef(null);
 
   const [value, setValue] = React.useState("active");
@@ -27,8 +27,28 @@ function ConfirmationDialogRaw(props) {
   };
 
   const handleOk = () => {
-    console.log(value);
-    console.log(rows);
+    let data = rows.map(row => {
+      return { id: row.id_obu, status: value };
+    });
+    return fetch(`${process.env.REACT_APP_SERVER_BINDING}/ums`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authentication": token
+      },
+      body: JSON.stringify(data)
+    })
+      .then(res => res.json())
+      .then(result => {
+        refreshData();
+        onClose();
+        handleOpenAlert(
+          result.status,
+          result.message
+            ? result.message
+            : `ID OBU ${result.data.rows} status ${result.data.status}`
+        );
+      });
   };
 
   const handleChange = event => {
@@ -47,13 +67,9 @@ function ConfirmationDialogRaw(props) {
     >
       <DialogTitle id="confirmation-dialog-title">Action</DialogTitle>
       <DialogContent dividers>
-        <div style={{ marginBottom: '15px'}}>
+        <div style={{ marginBottom: "15px" }}>
           {rows.map((row, i) => (
-            <Chip
-              key={i}
-              label={row.id_obu}
-              variant="outlined"
-            />
+            <Chip key={i} label={row.id_obu} variant="outlined" />
           ))}
         </div>
         <RadioGroup

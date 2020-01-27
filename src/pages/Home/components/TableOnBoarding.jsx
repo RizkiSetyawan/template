@@ -18,15 +18,28 @@ const TableOnBoarding = props => {
       title="List On Boarding"
       tableRef={tableRef}
       columns={[
-        { title: "Nama", field: "nama", editable: "never" },
-        { title: "ID OBU", field: "id_obu", editable: "never" },
-        { title: "No HP", field: "no_hp", editable: "never" },
-        { title: "No Kendaraan", field: "plat_no", editable: "never" },
-        { title: "Golongan", field: "gol", editable: "never" },
+        { title: "Nama", field: "nama", editable: "never"},
+        {
+          title: "ID OBU",
+          field: "id_obu",
+          editable: "never"
+        },
+        { title: "No HP", field: "no_hp", editable: "never"},
+        {
+          title: "No Kendaraan",
+          field: "plat_no",
+          editable: "never"
+        },
+        {
+          title: "Golongan",
+          field: "gol",
+          editable: "never"
+        },
         {
           title: "Created at",
           field: "created_at",
           editable: "never",
+          type: 'date',
           render: row => moment(row.created_at).format("DD-MM-YYYY")
         },
         {
