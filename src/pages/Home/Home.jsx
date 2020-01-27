@@ -1,10 +1,14 @@
-import React, { useState, createRef } from "react";
+import React, { useState, createRef, useContext } from "react";
 
 import { makeStyles } from "@material-ui/core/styles";
 
-import FormOnBoarding from "./components/FormOnBoarding"
-import TableOnBoarding from "./components/TableOnBoarding"
+import AlertContext from "../../context/alert/alertContext";
+
+import FormOnBoarding from "./components/FormOnBoarding";
+import TableOnBoarding from "./components/TableOnBoarding";
 import DialogAction from "./components/DialogAction";
+
+import Alerts from "../../components/Alerts/Alerts";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -14,8 +18,18 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Home = () => {
-  const tableRef = createRef();
   const classes = useStyles();
+  const tableRef = createRef();
+  const alertContext = useContext(AlertContext);
+
+  const {
+    openAlert,
+    typeAlert,
+    messageAlert,
+    handleOpenAlert,
+    handleCloseAlert
+  } = alertContext;
+
   const [state, setState] = useState({
     rows: [],
     openAction: false,
@@ -43,14 +57,14 @@ const Home = () => {
       ...state,
       openForm: true
     });
-  }
+  };
 
   const handleCloseForm = () => {
     setState({
       ...state,
       openForm: false
     });
-  }
+  };
 
   const refreshData = () => {
     tableRef.current && tableRef.current.onQueryChange();
@@ -85,7 +99,7 @@ const Home = () => {
       });
   };
 
-  const addData = (data) => {
+  const addData = data => {
     return fetch(process.env.REACT_APP_SERVER_BINDING, {
       method: "POST",
       headers: {
@@ -96,7 +110,8 @@ const Home = () => {
       .then(res => res.json())
       .then(result => {
         refreshData();
-        handleCloseForm()
+        handleCloseForm();
+        handleOpenAlert(result.status, result.message);
       });
   };
 
@@ -141,9 +156,15 @@ const Home = () => {
         handleClose={handleCloseForm}
         addData={addData}
       />
+      <Alerts
+        open={openAlert}
+        handleOpenAlert={handleOpenAlert}
+        handleCloseAlert={handleCloseAlert}
+        typeAlert={typeAlert}
+        messageAlert={messageAlert}
+      />
     </div>
   );
 };
 
 export default Home;
-
